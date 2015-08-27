@@ -8,4 +8,6 @@ It also offers powerful data generation in order to generate sample data for a S
 
 This is the code for the MS Excel Add-in on [www.sqlforexcel.com](http://sqlforexcel.com/)
 
-### You'll need [Add-in Express for Office and .net](https://www.add-in-express.com/add-in-net/index.php) in order to build and run this project.
+If you wish to contribute, please submit a pull request.
+
+#### You'll need [Add-in Express for Office and .net](https://www.add-in-express.com/add-in-net/index.php) in order to build and run this project.
