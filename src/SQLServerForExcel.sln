@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40418.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLServerForExcel.Addin", "SQLServerForExcel.Addin\SQLServerForExcel.Addin.csproj", "{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericParsing", "GenericParser_src\GenericParsing\GenericParsing.csproj", "{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

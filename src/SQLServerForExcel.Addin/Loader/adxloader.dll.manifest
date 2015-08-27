@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <assemblyIdentity name="SQLServerForExcel.Addin, PublicKeyToken=47e4194e3a7d92da" />
+  <loaderSettings generateLogFile="true" shadowCopyEnabled="false" privileges="user" configFileName="App.config" />
+</configuration>

@@ -1,0 +1,11 @@
+﻿<uncommittedchanges>
+  <row key="1" keydatatype="System.Double" column="FirstName" columndatatype="System.String">John</row>
+  <row key="2" keydatatype="System.Double" column="FirstName" columndatatype="System.String">Susan</row>
+  <row key="3" keydatatype="System.Double" column="FirstName" columndatatype="System.String">Anne</row>
+  <row key="4" keydatatype="System.Double" column="FirstName" columndatatype="System.String">Andrea</row>
+  <row key="5" keydatatype="System.Double" column="LastName" columndatatype="System.String">Smith</row>
+  <row key="6" keydatatype="System.Double" column="LastName" columndatatype="System.String">George</row>
+  <row key="7" keydatatype="System.Double" column="LastName" columndatatype="System.String">West</row>
+  <row key="8" keydatatype="System.Double" column="LastName" columndatatype="System.String">Jones</row>
+  <row key="3" keydatatype="System.Double" column="State" columndatatype="System.String">AZ</row>
+</uncommittedchanges>
