@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -324,9 +324,10 @@ namespace SQLServerForExcel_Addin.Extensions
                         string column = dm.Attribute("column").Value;
                         string columnDataType = dm.Attribute("columndatatype").Value;
                         string value = dm.Value;
-
+                      
                         sql += "UPDATE " + tableName + " SET " + column + " = ";
-                        if (columnDataType.ToLower().Contains("date") || columnDataType.ToLower().Contains("string"))
+                        
+                        if (columnDataType.ToLower().Contains("date") || columnDataType.ToLower().Contains("string") || columnDataType.ToLower().Contains("boolean"))
                         {
                             sql += "'" + value + "'";
                         }
