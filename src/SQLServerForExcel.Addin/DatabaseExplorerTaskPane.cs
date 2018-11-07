@@ -121,7 +121,12 @@ namespace SQLServerForExcel_Addin
                 queryTable.Refresh(false);
 
                 var primaryKey = SqlUtils.GetPrimaryKey(dcd.ConnectionString, tableName);
-                sheet.Name = tableName;
+
+                // save original table 
+                this.tableName = tableName;
+                // to sheet name must be less then 31 characters long 
+                sheet.Name = tableName.Substring(0, Math.Min(tableName.Length, 30));
+                
                 chPrimaryKey.Text = primaryKey;
 
                 sheetProperties = sheet.CustomProperties;
@@ -270,19 +275,17 @@ namespace SQLServerForExcel_Addin
             Excel.Worksheet sheet = null;
             Excel.CustomProperty primaryKeyProperty = null;
             string primaryKey = string.Empty;
-            string tableName = string.Empty;
 
             try
             {
                 sheet = ExcelApp.ActiveSheet as Excel.Worksheet;
                 if (sheet != null)
                 {
-                    tableName = sheet.Name;
                     primaryKeyProperty = sheet.GetProperty("PrimaryKey");
                     if (primaryKeyProperty != null)
                     {
                         primaryKey = primaryKeyProperty.Value.ToString();
-                        string sql = sheet.ChangesToSql(tableName, primaryKey);
+                        string sql = sheet.ChangesToSql(this.tableName, primaryKey);
 
                         diagSaveFile.ShowDialog();
                         if (!string.IsNullOrEmpty(diagSaveFile.FileName))
@@ -350,7 +353,6 @@ namespace SQLServerForExcel_Addin
             Excel.Worksheet sheet = null;
             Excel.CustomProperty primaryKeyProperty = null;
             string primaryKey = string.Empty;
-            string tableName = string.Empty;
 
             try
             {
@@ -359,12 +361,11 @@ namespace SQLServerForExcel_Addin
                     sheet = ExcelApp.ActiveSheet as Excel.Worksheet;
                     if (sheet != null)
                     {
-                        tableName = sheet.Name;
                         primaryKeyProperty = sheet.GetProperty("PrimaryKey");
                         if (primaryKeyProperty != null)
                         {
                             primaryKey = primaryKeyProperty.Value.ToString();
-                            string sql = sheet.ChangesToSql(tableName, primaryKey);
+                            string sql = sheet.ChangesToSql(this.tableName, primaryKey);
 
                             if (!string.IsNullOrEmpty(sql))
                             {
