@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{2f26547a-8cb6-4d32-94be-66c7e3e6a5e7}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>SQLServerForExcel.AddinSetup(0.0.1)</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <Name>SQLServerForExcel.AddinSetup(0.0.1)</Name>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>Debug;ADX_PATH=C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\;</DefineConstants>
+    <SuppressSpecificWarnings>1076;1072</SuppressSpecificWarnings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <DefineConstants>Debug;ADX_PATH=C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\;</DefineConstants>
+    <SuppressSpecificWarnings>1076;1072</SuppressSpecificWarnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="banner.bmp" />
+    <Content Include="dialog.bmp" />
+    <Content Include="License.rtf" />
+    <Content Include="Resources\WiXDefBannerBitmap.bmp" />
+    <Content Include="Resources\WiXNewFolderBtn.ico" />
+    <Content Include="Resources\WiXUpFolderBtn.ico" />
+    <Content Include="XSLT\RegisterForCOM.xml" />
+    <Content Include="XSLT\XslFile.xslt" />
+    <Content Include="XSLT\XslRegisterForCOM.xslt" />
+    <Content Include="XSLT\XslProjectOutput.xslt" />
+    <Content Include="XSLT\readme.txt" />
+    <Content Include="XSLT\_SQLServerForExcel.Addin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixNetFxExtension">
+      <HintPath>$(WixExtDir)\WixNetFxExtension.dll</HintPath>
+      <Name>WixNetFxExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="XSLT\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SQLServerForExcel.Addin.csproj">
+      <Name>SQLServerForExcel.Addin</Name>
+      <Project>{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}</Project>
+      <Private>True</Private>
+      <DoNotHarvest />
+      <RefProjectOutputGroups>Binaries;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <Target Name="BeforeBuild">
+    <!-- Create temporary directory for XML files -->
+    <MakeDir Directories="$(IntermediateOutputPath)Harvested XML" />
+    <!-- Create a directory for harvested WSX files -->
+    <MakeDir Directories="$(IntermediateOutputPath)Harvested Output" />
+    <!-- Read the RegisterForCOM.xml file and create a file with the list of files which should be registered for COM -->
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='HeatFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)'/&gt;" Condition="$(MSBuildToolsVersion) &lt;= 12" />
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" UseTrustedSettings="true" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='HeatFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)'/&gt;" Condition="$(MSBuildToolsVersion) &gt;= 14" />
+    <!-- Load the list of COM files to the COMFilelist variable -->
+    <ReadLinesFromFile File="$(IntermediateOutputPath)_COMFiles.txt">
+      <Output TaskParameter="Lines" ItemName="COMFilelist" />
+    </ReadLinesFromFile>
+    <!-- Resolve paths to the COM files -->
+    <ConvertToAbsolutePath Paths="@(COMFilelist)">
+      <Output TaskParameter="AbsolutePaths" ItemName="ResolvedCOMFilelist" />
+    </ConvertToAbsolutePath>
+    <!-- Extract the registy information from the list of COM files and store it to temporary XML files -->
+    <Exec Command="&quot;$(Wix)Bin\heat.exe&quot; file &quot;%(ResolvedCOMFilelist.Identity)&quot; -sw -gg -sfrag -nologo -srd -out &quot;$(IntermediateOutputPath)Harvested XML\_%(Filename).com.xml&quot;" IgnoreExitCode="false" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'%(ResolvedCOMFilelist.Identity)'!=''" />
+    <!-- Read the RegisterForCOM.xml file and create a file with the list of XML files created in the previous operation -->
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='TransformFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested XML\'/&gt;" Condition="$(MSBuildToolsVersion) &lt;= 12" />
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" UseTrustedSettings="true" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='TransformFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested XML\'/&gt;" Condition="$(MSBuildToolsVersion) &gt;= 14" />
+    <!-- Load the list of XML files to the XMLFileList variable -->
+    <ReadLinesFromFile File="$(IntermediateOutputPath)_COMFiles.txt">
+      <Output TaskParameter="Lines" ItemName="XMLFileList" />
+    </ReadLinesFromFile>
+    <!-- Process the XML files to create the final WSX files with the registy information -->
+    <XslTransformation XmlInputPaths="%(XMLFileList.Identity)" XslInputPath="XSLT\XslFile.xslt" OutputPaths="$(IntermediateOutputPath)Harvested Output\%(Filename).wsx" Parameters="&lt;Parameter Name='sourceFilePath' Value='%(XMLFileList.Identity)'/&gt;" Condition="'%(XMLFileList.Identity)'!='' And $(MSBuildToolsVersion) &lt;= 12" />
+    <XslTransformation XmlInputPaths="%(XMLFileList.Identity)" XslInputPath="XSLT\XslFile.xslt" UseTrustedSettings="true" OutputPaths="$(IntermediateOutputPath)Harvested Output\%(Filename).wsx" Parameters="&lt;Parameter Name='sourceFilePath' Value='%(XMLFileList.Identity)'/&gt;" Condition="'%(XMLFileList.Identity)'!='' And $(MSBuildToolsVersion) &gt;= 14" />
+    <!-- Generate WSX files from project references -->
+    <Exec Command="&quot;$(Wix)Bin\heat.exe&quot; project &quot;%(ProjectReference.FullPath)&quot; -projectname &quot;%(ProjectReference.Name)&quot; -pog %(ProjectReference.RefProjectOutputGroups) -gg -sfrag -nologo -out &quot;$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml&quot;" IgnoreExitCode="false" WorkingDirectory="$(MSBuildProjectDirectory)" Condition="'%(ProjectReference.FullPath)'!='' And '%(ProjectReference.DoNotHarvest)'!='True' And '%(ProjectReference.ImportedFromVDProj)'=='True'" />
+    <HeatProject Project="%(ProjectReference.FullPath)" ProjectName="%(ProjectReference.Name)" OutputFile="$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml" ProjectOutputGroups="%(ProjectReference.RefProjectOutputGroups)" ToolPath="$(Wix)Bin\" SuppressAllWarnings="true" AutogenerateGuids="false" GenerateGuidsNow="true" SuppressFragments="true" SuppressUniqueIds="false" Condition="'%(ProjectReference.FullPath)'!='' And '%(ProjectReference.DoNotHarvest)'!='True' And '%(ProjectReference.ImportedFromVDProj)'!='True'" />
+    <!-- Process the XML files to create the final WSX files with the registy information for each project reference -->
+    <XslTransformation XmlInputPaths="$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml" XslInputPath="XSLT\XslProjectOutput.xslt" OutputPaths="$(IntermediateOutputPath)Harvested Output\_%(ProjectReference.Name).wxs" Parameters="&lt;Parameter Name='projectName' Value='%(ProjectReference.Name)'/&gt;&lt;Parameter Name='projectFilePath' Value='%(ProjectReference.FullPath)'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested Output\'/&gt;" Condition="'%(ProjectReference.FullPath)'!='' And '%(ProjectReference.DoNotHarvest)'!='True' And Exists('$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml') And $(MSBuildToolsVersion) &lt;= 12" />
+    <XslTransformation XmlInputPaths="$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml" XslInputPath="XSLT\XslProjectOutput.xslt" UseTrustedSettings="true" OutputPaths="$(IntermediateOutputPath)Harvested Output\_%(ProjectReference.Name).wxs" Parameters="&lt;Parameter Name='projectName' Value='%(ProjectReference.Name)'/&gt;&lt;Parameter Name='projectFilePath' Value='%(ProjectReference.FullPath)'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested Output\'/&gt;" Condition="'%(ProjectReference.FullPath)'!='' And '%(ProjectReference.DoNotHarvest)'!='True' And Exists('$(IntermediateOutputPath)Harvested XML\_%(ProjectReference.Name).xml') And $(MSBuildToolsVersion) &gt;= 14" />
+    <!-- Read the RegisterForCOM.xml file and create a file with the list of WSX files which should be included in the project -->
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='CompileFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested Output\'/&gt;" Condition="$(MSBuildToolsVersion) &lt;= 12" />
+    <XslTransformation XmlInputPaths="XSLT\RegisterForCOM.xml" XslInputPath="XSLT\XslRegisterForCOM.xslt" UseTrustedSettings="true" OutputPaths="$(IntermediateOutputPath)_COMFiles.txt" Parameters="&lt;Parameter Name='operationType' Value='CompileFiles'/&gt;&lt;Parameter Name='intermediateDir' Value='$(IntermediateOutputPath)Harvested Output\'/&gt;" Condition="$(MSBuildToolsVersion) &gt;= 14" />
+    <!-- Load the list of WSX files to the WSXFileList variable -->
+    <ReadLinesFromFile File="$(IntermediateOutputPath)_COMFiles.txt">
+      <Output TaskParameter="Lines" ItemName="WSXFileList" />
+    </ReadLinesFromFile>
+    <!-- Include generated WSX files in the project -->
+    <CreateItem Include="$(IntermediateOutputPath)Harvested Output\_%(ProjectReference.Name).wxs" Condition="'%(ProjectReference.FullPath)'!='' And '%(ProjectReference.DoNotHarvest)'!='True' And Exists('$(IntermediateOutputPath)Harvested Output\_%(ProjectReference.Name).wxs')">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+    <CreateItem Include="@(WSXFileList)" Condition="Exists('%(WSXFileList.Identity)')">
+      <Output TaskParameter="Include" ItemName="Compile" />
+    </CreateItem>
+  </Target>
+  <Target Name="AfterBuild">
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+      <!-- Add bootstrapper items here -->
+    </ItemGroup>
+    <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+      <!-- Add bootstrapper items here -->
+    </ItemGroup>
+    <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="SQLServerForExcel_Addin" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="HomeSite" CopyComponents="False" OutputPath="$(OutputPath)" Path="c:\Program Files (x86)\Microsoft SDKs\ClickOnce Bootstrapper\" ApplicationRequiresElevation="False" Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' " />
+    <GenerateBootstrapper ApplicationFile="$(TargetFileName)" ApplicationName="SQLServerForExcel_Addin" BootstrapperItems="@(BootstrapperFile)" ComponentsLocation="HomeSite" CopyComponents="False" OutputPath="$(OutputPath)" Path="c:\Program Files (x86)\Microsoft SDKs\ClickOnce Bootstrapper\" ApplicationRequiresElevation="False" Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' " />
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40418.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLServerForExcel.Addin", "SQLServerForExcel.Addin\SQLServerForExcel.Addin.csproj", "{9F0D2C29-DB70-4658-A69A-03C65A73BF5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericParsing", "GenericParser_src\GenericParsing\GenericParsing.csproj", "{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SQLServerForExcel", "SQLServerForExcel.Addin\SQLServerForExcel.AddinSetup\1.0.0\SQLServerForExcel.wixproj", "{80DA327A-C111-4E78-B294-691BE54F7F79}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SQLServerForExcel.AddinSetup(0.0.1)", "SQLServerForExcel.Addin\SQLServerForExcel.AddinSetup\0.0.1\SQLServerForExcel.AddinSetup(0.0.1).wixproj", "{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,18 +39,21 @@ Global
 		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ADD325F8-CBD9-43FE-850D-E2F34D736C9D}.Release|x86.ActiveCfg = Release|Any CPU
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Debug|x86.ActiveCfg = Debug|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Debug|x86.Build.0 = Debug|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Release|Any CPU.ActiveCfg = Release|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Release|Mixed Platforms.Build.0 = Release|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Release|x86.ActiveCfg = Release|x86
-		{80DA327A-C111-4E78-B294-691BE54F7F79}.Release|x86.Build.0 = Release|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Debug|x86.ActiveCfg = Debug|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Debug|x86.Build.0 = Debug|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Release|Any CPU.ActiveCfg = Release|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Release|x86.ActiveCfg = Release|x86
+		{2F26547A-8CB6-4D32-94BE-66C7E3E6A5E7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A270ECD1-4367-42F5-A016-3902358F4BE8}
 	EndGlobalSection
 EndGlobal

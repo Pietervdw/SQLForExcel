@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <Product
+    Id="*"
+    Name="SQL Server For Excel Beta"
+    Language="1033"
+    Version="0.0.1"
+    Manufacturer="Westhazen Developer Tools"
+    UpgradeCode="9f0d2c29-db70-4658-a69a-03c65a73bf5f"
+    Codepage="1252">
+
+    <Package
+      InstallerVersion="200"
+      Compressed="yes"
+      InstallScope="perUser"
+      Description="Edit, save and export SQL Server Dat"
+      Manufacturer="Westhazen Developer Tools"
+      Languages="1033"
+      SummaryCodepage="1252"
+      InstallPrivileges="limited"
+    />
+
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <Media Id="1" Cabinet="SQLServerForExcel.Addin.cab" EmbedCab="yes" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+
+    <Feature Id="ProductFeature" Title="SQL Server For Excel" Level="1" ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentRef Id="INSTALLFOLDER" />
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Binary Id="adxregistrator_exe" SourceFile="$(var.ADX_PATH)\Redistributables\adxregistrator.exe" />
+
+    <CustomAction Id="RegisterApp" BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/install="[INSTALLFOLDER]$(var.SQLServerForExcel.Addin.TargetFileName)" /privileges=user /returnExitCode=false' Impersonate="yes" />
+    <CustomAction Id="RollbackApp" BinaryKey="adxregistrator_exe" Execute="rollback" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.SQLServerForExcel.Addin.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+    <CustomAction Id="UnregisterApp" BinaryKey="adxregistrator_exe" Execute="deferred" ExeCommand='/uninstall="[INSTALLFOLDER]$(var.SQLServerForExcel.Addin.TargetFileName)" /privileges=user' Impersonate="yes" Return="ignore" />
+
+    <InstallExecuteSequence>
+      <Custom Action="RegisterApp" After="StartServices"><![CDATA[$ProductComponent>2]]></Custom>
+      <Custom Action="RollbackApp" After="RegisterApp"><![CDATA[$ProductComponent>2]]></Custom>
+      <Custom Action="UnregisterApp" After="MsiUnpublishAssemblies"><![CDATA[$ProductComponent=2]]></Custom>
+    </InstallExecuteSequence>
+
+    <!-- Properties for all current versions of the .NET Framework are available here: http://wix.sourceforge.net/manual-wix3/wixnetfxextension.htm -->
+    <PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
+    </Condition>
+
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="SQL Server For Excel" >
+          <Component Id="INSTALLFOLDER" Guid="0fa1bca2-90d2-43cd-b615-aed606f592fd">
+            <RemoveFolder On="both" Id="INSTALLFOLDER"/>
+            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Type="string" Value="SQL Server For Excel" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" >
+      <Component Id="ProductComponent" Guid="6bb75d27-0f72-4553-be42-dc910a5d49ad" DiskId="1" Directory="INSTALLFOLDER" >
+        <RegistryKey Root="HKCU" Key="Software\[Manufacturer]\[ProductName]">
+          <RegistryValue Type="string" Name="Installed" Value="[INSTALLFOLDER]" KeyPath="yes" />
+        </RegistryKey>
+        <File Id="_$(var.SQLServerForExcel.Addin.TargetName)_dll" Name="$(var.SQLServerForExcel.Addin.TargetFileName)" Source="$(var.SQLServerForExcel.Addin.TargetPath)" />
+        <File Id="_adxloader_dll_manifest" Name="adxloader.dll.manifest" Source="$(var.SQLServerForExcel.Addin.ProjectDir)Loader\" />
+        <File Id="_adxloader_dll" Name="adxloader.dll" Source="$(var.SQLServerForExcel.Addin.ProjectDir)Loader\"  />
+        <File Id="_adxloader64_dll" Name="adxloader64.dll" Source="$(var.SQLServerForExcel.Addin.ProjectDir)Loader\" />
+        <File Id="_AddinExpress_MSO_2005_dll" Name="AddinExpress.MSO.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+        <File Id="_AddinExpress_XL_2005_dll" Name="AddinExpress.XL.2005.dll" Source="C:\Program Files (x86)\Add-in Express\Add-in Express for .NET\Bin\" />
+        <File Id="_GenericParsing_dll" Name="GenericParsing.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_Microsoft_Data_ConnectionUI_Dialog_dll" Name="Microsoft.Data.ConnectionUI.Dialog.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_Microsoft_Office_Interop_Excel_dll" Name="Microsoft.Office.Interop.Excel.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_GenericParsing_pdb" Name="GenericParsing.pdb" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_Microsoft_Data_ConnectionUI_dll" Name="Microsoft.Data.ConnectionUI.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_Microsoft_Vbe_Interop_dll" Name="Microsoft.Vbe.Interop.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+        <File Id="_Office_dll" Name="Office.dll" Source="$(var.SQLServerForExcel.Addin.TargetDir)" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
