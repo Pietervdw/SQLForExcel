@@ -1,3 +1,7 @@
+:warning:  This repository has been deprecated and is now read only. If you're looking for a similar product, take a look at [Devart Excel Add-ins](https://www.devart.com/excel-addins/sql-server.html)
+
+:information_source:  If you need your own Office add-in, web app or mobile app. Drop me a line at https://coalition.software
+
 # SQL Server for Excel
 
 ##Import, edit and generate data for SQL Server in Excel.
